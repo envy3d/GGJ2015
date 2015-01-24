@@ -1,16 +1,48 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PlayerUI : MonoBehaviour {
+public class PlayerUI : MonoBehaviour
+{
 
     public GameObject playerUiPrefab;
+    public int countdownMaxSlices;
+    public float countdownMaxTime;
 
+    private GameManager gm;
+    private int playerNumber;
     private GameObject playerUI;
+    private UnityEngine.UI.Slider countdownSlider;
+    private bool active = false;
+    private int countdown;
+    private float countdownTime;
+
+    void Update()
+    {
+        if (active)
+        {
+            
+            
+            // Countdown
+            UpdateCountdown();
+        }
+    }
+
+    void Awake()
+    {
+        gm = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
+    }
+
+    public void Init()
+    {
+        active = true;
+        ResetCountdown();
+    }
 
     public void ReceivePlayerNumber(int playerNumber)
     {
+        this.playerNumber = playerNumber;
         GameObject board = GameObject.FindGameObjectWithTag("GameBoard");
-        float boardWidth = board.GetComponent<RectTransform>().rect.width;
+        float boardWidth = 1024;  //hack hack hack
 
         playerUI = GameObject.Instantiate(playerUiPrefab) as GameObject;
         var playerUiRectTransform = playerUI.GetComponent<RectTransform>();
@@ -18,16 +50,27 @@ public class PlayerUI : MonoBehaviour {
         playerUiRectTransform.localScale = new Vector3(1, 1, 1);
         playerUiRectTransform.offsetMin = new Vector2((playerNumber) * (boardWidth / 4), 0);
         playerUiRectTransform.offsetMax = new Vector2(-(3 - playerNumber) * (boardWidth / 4), 0);
-        //playerUiRectTransform.rect.Set(0, 0, 256, playerUiRectTransform.rect.height);
-        playerUI.transform.SetParent(board.transform);
 
-        //var playerUiRectTransform = playerUI.GetComponent<RectTransform>();
+        countdownSlider = playerUI.GetComponentInChildren<UnityEngine.UI.Slider>();
+    }
 
+    public void UpdateCountdown()
+    {
+        countdown = (int)((countdownMaxSlices / countdownMaxTime) * countdownTime);
+        countdownSlider.value = countdown;
+        if (countdownTime <= 0 && countdownTime > -10)
+        {
+            gm.FailInstruction(playerNumber);
+            ResetCountdown();
+            
+        }
+        countdownTime -= Time.deltaTime;
+    }
 
-       // playerUiRectTransform.rect.Set(0, 0, 256, playerUiRectTransform.rect.height);
-        /*playerUiRectTransform.rect.Set((-boardWidth/2) + ((playerNumber - 1) * (boardWidth / 4)),
-                                        playerUiRectTransform.rect.yMin,
-                                        boardWidth / 4,
-                                        playerUiRectTransform.rect.height);*/
+    public void ResetCountdown()
+    {
+        countdownSlider.maxValue = countdownMaxSlices;
+        countdown = countdownMaxSlices;
+        countdownTime = countdownMaxTime;
     }
 }

@@ -5,26 +5,21 @@ public class PlayerManager : MonoBehaviour
 {
     public GameObject playerPrefab;
 
-    [SerializeField]
     private int numberOfPlayers;
-    [SerializeField]
-    private int numberOfFirstLevel = 1;
 
-    void Start()
+
+    public void Init()
     {
-        DontDestroyOnLoad(this);
-        OnLevelWasLoaded(2);
+        for (int playerNum = 0; playerNum < numberOfPlayers; playerNum++)
+        {
+            GameObject player = Instantiate(playerPrefab) as GameObject;
+            player.BroadcastMessage("ReceivePlayerNumber", playerNum);
+            player.BroadcastMessage("Init");
+        }
     }
 
-    void OnLevelWasLoaded(int level)
+    public void ReceiveNumberOfPlayers(int numOfPlayers)
     {
-        if (level >= numberOfFirstLevel)
-        {
-            for (int playerNum = 0; playerNum < numberOfPlayers; playerNum++)
-            {
-                GameObject player = Instantiate(playerPrefab) as GameObject;
-                player.BroadcastMessage("ReceivePlayerNumber", playerNum);
-            }
-        }
+        numberOfPlayers = numOfPlayers;
     }
 }
