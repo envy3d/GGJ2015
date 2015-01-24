@@ -1,17 +1,19 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Linq;
 
 public class PlayerUI : MonoBehaviour
 {
 
     public GameObject playerUiPrefab;
+    public UnityEngine.UI.Slider countdownSlider;
+    public UnityEngine.UI.Text instructionText;
     public int countdownMaxSlices;
     public float countdownMaxTime;
 
     private GameManager gm;
     private int playerNumber;
     private GameObject playerUI;
-    private UnityEngine.UI.Slider countdownSlider;
     private bool active = false;
     private int countdown;
     private float countdownTime;
@@ -49,9 +51,12 @@ public class PlayerUI : MonoBehaviour
         playerUI.transform.SetParent(board.transform);
         playerUiRectTransform.localScale = new Vector3(1, 1, 1);
         playerUiRectTransform.offsetMin = new Vector2((playerNumber) * (boardWidth / 4), 0);
-        playerUiRectTransform.offsetMax = new Vector2(-(3 - playerNumber) * (boardWidth / 4), 0);
+        playerUiRectTransform.offsetMax = new Vector2( -(3 - playerNumber) * (boardWidth / 4), 0);
 
         countdownSlider = playerUI.GetComponentInChildren<UnityEngine.UI.Slider>();
+        instructionText = (from text in playerUI.GetComponentsInChildren<UnityEngine.UI.Text>()
+                           where text.name == "Instruction Text"
+                           select text).Single<UnityEngine.UI.Text>();
     }
 
     public void UpdateCountdown()
@@ -76,16 +81,16 @@ public class PlayerUI : MonoBehaviour
 
     public void FailInstruction()
     {
-
+        instructionText.text = "";
     }
 
     public void WinInstruction()
     {
-
+        instructionText.text = "";
     }
 
     public void SetInstruction(Skill instruction)
     {
-
+        instructionText.text = instruction.instruction;
     }
 }

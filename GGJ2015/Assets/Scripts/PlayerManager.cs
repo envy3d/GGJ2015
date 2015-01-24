@@ -7,7 +7,7 @@ public class PlayerManager : MonoBehaviour
     public GameObject playerPrefab;
 
     private int numberOfPlayers;
-    private List<PlayerUI> players;
+    private List<PlayerUI> playerUIs;
 
 
     public void Init()
@@ -17,28 +17,33 @@ public class PlayerManager : MonoBehaviour
             GameObject player = Instantiate(playerPrefab) as GameObject;
             player.BroadcastMessage("ReceivePlayerNumber", playerNum);
             player.BroadcastMessage("Init");
-            players.Add(player.GetComponent<PlayerUI>());
+            playerUIs.Add(player.GetComponent<PlayerUI>());
         }
     }
 
     public void ReceiveNumberOfPlayers(int numOfPlayers)
     {
         numberOfPlayers = numOfPlayers;
-        players = new List<PlayerUI>(numOfPlayers);
+        playerUIs = new List<PlayerUI>(numOfPlayers);
     }
 
     public void FailInstruction(int playerNum)
     {
-        players[playerNum].FailInstruction();
+        playerUIs[playerNum].FailInstruction();
     }
 
     public void WinInstruction(int playerNum)
     {
-        players[playerNum].WinInstruction();
+        playerUIs[playerNum].WinInstruction();
     }
 
     public void SetInstruction(int playerNum, Skill instruction)
     {
-        players[playerNum].SetInstruction(instruction);
+        playerUIs[playerNum].SetInstruction(instruction);
+    }
+
+    public void SetSkills(int playerNum, int skill1, int skill2, int skill3, int skill4)
+    {
+
     }
 }

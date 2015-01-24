@@ -69,6 +69,7 @@ public class AllSkillsEditor : Editor
         for(int i = 0; i < ThisList.arraySize; i++){
             SerializedProperty SkillsRef = ThisList.GetArrayElementAtIndex(i);
             SerializedProperty MyName = SkillsRef.FindPropertyRelative("name");
+            SerializedProperty MyInstr = SkillsRef.FindPropertyRelative("instruction");
             SerializedProperty MyIcon = SkillsRef.FindPropertyRelative("icon");
             SerializedProperty MyEffect = SkillsRef.FindPropertyRelative("effect");
  
@@ -79,6 +80,7 @@ public class AllSkillsEditor : Editor
                 //1. Automatic, No customization <-- Choose me I'm automatic and easy to setup
                 EditorGUILayout.LabelField("Automatic Field By Property Type");
                 EditorGUILayout.PropertyField(MyName);
+                EditorGUILayout.PropertyField(MyInstr);
                 EditorGUILayout.PropertyField(MyIcon);
                 EditorGUILayout.PropertyField(MyEffect);
 

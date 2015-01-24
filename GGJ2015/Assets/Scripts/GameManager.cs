@@ -68,11 +68,31 @@ public class GameManager : MonoBehaviour
 
     public void GenerateNewInstruction(int playerNum)
     {
-        pm.SetInstruction(playerNum, allSkills.skills[Random.Range(0, playersSkillsIdx.Count - 1)]);
+        pm.SetInstruction(playerNum, allSkills.skills[Random.Range(0, playersSkillsIdx.Count)]);
     }
 
     public void ReceiveNumberOfPlayers(int numOfPlayers)
     {
         numberOfPlayers = numOfPlayers;
+    }
+
+    public void SetSkills()
+    {
+        int numberOfSkills = numberOfPlayers * 4;
+        playersSkillsIdx = new List<int>(numberOfSkills);
+        for (int i = 0; i < numberOfSkills; i++)
+        {
+            int nextSkillIdx;
+
+            do { nextSkillIdx = Random.Range(0, allSkills.skills.Count); }
+            while (playersSkillsIdx.Contains(nextSkillIdx));
+
+            playersSkillsIdx.Add(nextSkillIdx);
+        }
+
+        for (int ps = 0; ps < numberOfPlayers; ps++)
+        {
+            
+        }
     }
 }
