@@ -73,4 +73,19 @@ public class PlayerUI : MonoBehaviour
         countdown = countdownMaxSlices;
         countdownTime = countdownMaxTime;
     }
+
+    public void FailInstruction()
+    {
+
+    }
+
+    public void WinInstruction()
+    {
+
+    }
+
+    public void SetInstruction(Skill instruction)
+    {
+
+    }
 }

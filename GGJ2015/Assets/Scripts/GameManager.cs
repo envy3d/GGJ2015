@@ -15,13 +15,15 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private int numberOfPlayers;
     private PlayerManager pm;
+    private List<int> currentInstructions;
+    private EnemyController currentEnemy;
 
 
     void Awake()
     {
         DontDestroyOnLoad(this);
         allSkills = GetComponent<AllSkills>();
-        pm = GetComponent<PlayerManager>();
+        pm = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerManager>();
         OnLevelWasLoaded(2);
     }
 
@@ -29,25 +31,44 @@ public class GameManager : MonoBehaviour
     {
         if (level >= numberOfFirstLevel)
         {
-            BroadcastMessage("ReceiveNumberOfPlayers", numberOfPlayers);
-            BroadcastMessage("Init");
+            pm.ReceiveNumberOfPlayers(numberOfPlayers);
+            Init();
+            pm.Init();
         }
 
     }
 
     public void Init()
     {
-        //pm.Init();
+        
     }
 
-    public void UseSkill(int skillNumber)
+    public void UseSkill(int skillNumber, int playerNum)
     {
+        if (currentInstructions.Contains(skillNumber))
+        {
 
+            GenerateNewInstruction(playerNum);
+        }
+        else
+        {
+            FailInstruction(playerNum);
+        }
     }
 
     public void FailInstruction(int failedPlayerNum)
     {
+        teamHealth -= 1;
+        if (teamHealth <= 0)
+        {
+            // Game Over
+        }
+        GenerateNewInstruction(failedPlayerNum);
+    }
 
+    public void GenerateNewInstruction(int playerNum)
+    {
+        pm.SetInstruction(playerNum, allSkills.skills[Random.Range(0, playersSkillsIdx.Count - 1)]);
     }
 
     public void ReceiveNumberOfPlayers(int numOfPlayers)

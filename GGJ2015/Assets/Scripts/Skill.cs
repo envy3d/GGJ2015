@@ -5,6 +5,7 @@ using System;
 public class Skill
 {
     public string name;
+    public string instruction;
     public GameObject icon;
     public GameObject effect;
 }
